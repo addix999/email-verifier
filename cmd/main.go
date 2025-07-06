@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	emailverifier "github.com/addix999/email-verifier"
@@ -14,13 +15,13 @@ func main() {
 	http.HandleFunc("/verify", func(w http.ResponseWriter, r *http.Request) {
 		email := r.URL.Query().Get("email")
 		if email == "" {
-			http.Error(w, "email query param is required", http.StatusBadRequest)
+			http.Error(w, `{"error":"email parameter is required"}`, http.StatusBadRequest)
 			return
 		}
 
 		ret, err := v.Verify(email)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintf(`{"error":"%s"}`, err.Error()), http.StatusInternalServerError)
 			return
 		}
 
@@ -28,6 +29,7 @@ func main() {
 		json.NewEncoder(w).Encode(ret)
 	})
 
-	fmt.Println("Server jalan di port 10000...")
-	http.ListenAndServe(":10000", nil)
+	port := "10000"
+	fmt.Println("Server berjalan di port", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
