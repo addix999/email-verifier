@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	emailverifier "github.com/AfterShip/email-verifier"
+	emailverifier "github.com/addix999/email-verifier"
 )
 
 func main() {
